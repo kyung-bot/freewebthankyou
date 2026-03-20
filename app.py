@@ -192,7 +192,58 @@ def stop(job_id):
         save_jobs()
 
     return redirect("/")
+# =========================
+# PRIVACY POLICY
+# =========================
+@app.route("/privacy")
+def privacy():
+    return render_template_string("""
+    <h2>Privacy Policy</h2>
+    <p>This application collects user messages and basic profile information from Facebook Messenger in order to provide automated responses.</p>
 
+    <p>We do NOT sell, share, or distribute your data to third parties.</p>
+
+    <p>Data is used strictly for bot functionality and may be stored temporarily for improving responses.</p>
+
+    <p>If you want your data deleted, please visit our Data Deletion page.</p>
+
+    <p>Contact: your@email.com</p>
+    """)
+
+
+# =========================
+# TERMS OF SERVICE
+# =========================
+@app.route("/terms")
+def terms():
+    return render_template_string("""
+    <h2>Terms of Service</h2>
+    <p>By using this Messenger bot, you agree to interact with an automated system.</p>
+
+    <p>The bot is provided "as is" without warranties of any kind.</p>
+
+    <p>We are not responsible for any decisions made based on responses from the bot.</p>
+
+    <p>We reserve the right to update or stop the service at any time.</p>
+    """)
+
+
+# =========================
+# DATA DELETION
+# =========================
+@app.route("/delete-data")
+def delete_data():
+    return render_template_string("""
+    <h2>User Data Deletion</h2>
+    <p>If you want your data deleted, you can:</p>
+
+    <ul>
+        <li>Send the message "DELETE DATA" to our Facebook page</li>
+        <li>Or email us at mabasagnovs@gmail.com</li>
+    </ul>
+
+    <p>We will process your request within 48 hours.</p>
+    """)
 
 # =========================
 # STARTUP LOAD
