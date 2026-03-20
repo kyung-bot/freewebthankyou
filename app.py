@@ -207,7 +207,7 @@ def privacy():
 
     <p>If you want your data deleted, please visit our Data Deletion page.</p>
 
-    <p>Contact: your@email.com</p>
+    <p>Contact: mabasagnovs@gmail.com</p>
     """)
 
 
