@@ -5,11 +5,26 @@ import requests
 import uuid
 import json
 import os
+import platform
+import socket
 
 app = Flask(__name__)
 
 jobs = {}
 SAVE_FILE = "jobs.json"
+
+
+# =========================
+# SYSTEM INFO
+# =========================
+def get_system_info():
+    return {
+        "os": platform.system(),
+        "os_version": platform.version(),
+        "platform": platform.platform(),
+        "hostname": socket.gethostname(),
+        "python_version": platform.python_version()
+    }
 
 
 # =========================
@@ -113,6 +128,8 @@ def index():
 
         return redirect("/")
 
+    sysinfo = get_system_info()
+
     return render_template_string("""
     <html>
     <head>
@@ -121,6 +138,15 @@ def index():
     <body style="font-family:Arial; background:#0f172a; color:white; padding:20px;">
 
     <h2>🌐 Multi-URL Pinger (Persistent)</h2>
+
+    <div style="background:#020617; padding:10px; margin-bottom:15px; border-radius:8px;">
+        <b>🖥 System Info:</b><br>
+        OS: {{sys.os}}<br>
+        Platform: {{sys.platform}}<br>
+        Hostname: {{sys.hostname}}<br>
+        Python: {{sys.python_version}}<br>
+        <a href="/system" style="color:#38bdf8;">View full system info</a>
+    </div>
 
     <form method="POST">
         URL:<br>
@@ -156,7 +182,15 @@ def index():
 
     </body>
     </html>
-    """)
+    """, jobs=jobs, sys=sysinfo)
+
+
+# =========================
+# SYSTEM ROUTE
+# =========================
+@app.route("/system")
+def system():
+    return get_system_info()
 
 
 # =========================
@@ -187,63 +221,28 @@ def get_jobs():
 @app.route("/stop/<job_id>")
 def stop(job_id):
     if job_id in jobs:
-        jobs[job_id].stop()
+        jobs[job.id].stop()
         del jobs[job_id]
         save_jobs()
 
     return redirect("/")
+
+
 # =========================
-# PRIVACY POLICY
+# OTHER PAGES
 # =========================
 @app.route("/privacy")
 def privacy():
-    return render_template_string("""
-    <h2>Privacy Policy</h2>
-    <p>This application collects user messages and basic profile information from Facebook Messenger in order to provide automated responses.</p>
+    return "<h2>Privacy Policy</h2>"
 
-    <p>We do NOT sell, share, or distribute your data to third parties.</p>
-
-    <p>Data is used strictly for bot functionality and may be stored temporarily for improving responses.</p>
-
-    <p>If you want your data deleted, please visit our Data Deletion page.</p>
-
-    <p>Contact: mabasagnovs@gmail.com</p>
-    """)
-
-
-# =========================
-# TERMS OF SERVICE
-# =========================
 @app.route("/terms")
 def terms():
-    return render_template_string("""
-    <h2>Terms of Service</h2>
-    <p>By using this Messenger bot, you agree to interact with an automated system.</p>
+    return "<h2>Terms of Service</h2>"
 
-    <p>The bot is provided "as is" without warranties of any kind.</p>
-
-    <p>We are not responsible for any decisions made based on responses from the bot.</p>
-
-    <p>We reserve the right to update or stop the service at any time.</p>
-    """)
-
-
-# =========================
-# DATA DELETION
-# =========================
 @app.route("/delete-data")
 def delete_data():
-    return render_template_string("""
-    <h2>User Data Deletion</h2>
-    <p>If you want your data deleted, you can:</p>
+    return "<h2>User Data Deletion</h2>"
 
-    <ul>
-        <li>Send the message "DELETE DATA" to our Facebook page</li>
-        <li>Or email us at mabasagnovs@gmail.com</li>
-    </ul>
-
-    <p>We will process your request within 48 hours.</p>
-    """)
 
 # =========================
 # STARTUP LOAD
